@@ -764,7 +764,8 @@ for INDEX in (:VertexIndex, :EdgeIndex, :FaceIndex)
         Base.iterate(I::($INDEX), state::Int=1) = (state==3) ?  nothing : (I[state], state+1)
 
         #For (cellid, faceidx) in faceset
-        Base.in(v::Tuple{Int, Int}, s::AbstractSet{$INDEX}) = in($INDEX(v), s)
+        Base.in(v::Tuple{Int, Int}, s::Set{$INDEX}) = in($INDEX(v), s)
+        Base.in(v::Tuple{Int, Int}, s::OrderedSet{$INDEX}) = in($INDEX(v), s)
     end
 end
 
