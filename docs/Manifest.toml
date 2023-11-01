@@ -446,9 +446,9 @@ version = "1.0.1"
 
 [[deps.FerriteMeshParser]]
 deps = ["Ferrite"]
-git-tree-sha1 = "8b948577bc4066e9c8693438fd511309c7383761"
+git-tree-sha1 = "47a1215bc76454082e265cb5193cffc9700bccb7"
 uuid = "0f8c756f-80dd-4a75-85c6-b0a5ab9d4620"
-version = "0.1.7"
+version = "0.1.8"
 
 [[deps.FileIO]]
 deps = ["Pkg", "Requires", "UUIDs"]
