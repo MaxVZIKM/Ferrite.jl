@@ -100,7 +100,7 @@ end
 # check if point is inside a cell based on isoparametric coordinate
 function check_isoparametric_boundaries(::Type{RefSimplex{dim}}, x_local::Vec{dim, T}, tol::T) where {dim, T}
     # Positive and below the plane 1 - ξx - ξy - ξz
-    return all(x -> x ≥ -tol, x_local) && sum(x_local) - 1 < tol
+    return all(x -> x > -tol, x_local) && sum(x_local) - 1 < tol
 end
 
 cellcenter(::Type{<:RefHypercube{dim}}, _::Type{T}) where {dim, T} = zero(Vec{dim, T})
