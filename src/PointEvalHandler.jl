@@ -137,7 +137,7 @@ function find_local_coordinate(interpolation::IP, cell_coordinates::Vector{V}, g
             break
         end
         Δξ = _solve_helper(J, residual) # J \ b throws an error. TODO clean up when https://github.com/Ferrite-FEM/Tensors.jl/pull/188 is merged.
-        # Do line search if outside/on boundary
+        # Do line search if outside element
         best_index = 1
         new_local_guess = local_guess - Δξ
         global_guess = spatial_coordinate(interpolation, local_guess, cell_coordinates)
