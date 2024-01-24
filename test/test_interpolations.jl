@@ -75,8 +75,8 @@
         f(x) = [shape_value(interpolation, Tensor{1, ref_dim}(x), i) for i in 1:n_basefuncs]
 
         #TODO prefer this test style after 1.6 is removed from CI
-        # @testset let x = Ferrite.sample_random_point(ref_shape) # not compatible with Julia 1.6
-        x = Vec{ref_dim,value_type}(Ferrite.sample_random_point(ref_shape))
+        # @testset let x = sample_random_point(ref_shape) # not compatible with Julia 1.6
+        x = Vec{ref_dim,value_type}(sample_random_point(ref_shape))
         random_point_testset = @testset "Random point test" begin
             # Check gradient evaluation
             @test vec(ForwardDiff.jacobian(f, Array(x))') ≈
