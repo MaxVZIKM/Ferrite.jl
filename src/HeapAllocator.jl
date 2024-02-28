@@ -11,6 +11,12 @@ end
 SizedPtr{T}(ptr::SizedPtr) where {T} = SizedPtr{T}(Ptr{T}(ptr.ptr), ptr.size)
 Ptr{T}(ptr::SizedPtr) where {T} = Ptr{T}(ptr.ptr)
 
+function memcpy(dst::SizedPtr, src::SizedPtr)
+    @assert dst.size >= src.size
+    ccall(:memcpy, Ptr{Cvoid}, (Ptr{Cvoid}, Ptr{Cvoid}, Csize_t), dst.ptr, src.ptr, src.size)
+    return
+end
+
 # A page corresponds to a larger Libc.malloc call (MALLOC_PAGE_SIZE). Each page
 # is split into smaller blocks to minimize the number of Libc.malloc/Libc.free
 # calls.
@@ -214,7 +220,7 @@ function realloc(heap::Heap, ptr::SizedPtr{UInt8}, newsize::UInt)
     # Allocate the new pointer
     ptr′ = malloc(heap, newsize)
     # Copy the data
-    Libc.memcpy(ptr′.ptr, ptr.ptr, ptr.size)
+    memcpy(ptr′, ptr)
     # Free the old pointer and return
     _free(page, ptr)
     return ptr′
