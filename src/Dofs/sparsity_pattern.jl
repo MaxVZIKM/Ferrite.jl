@@ -203,7 +203,7 @@ and documentation of supported arguments `args...` and keyword arguments `kwargs
 function create_sparsity_pattern(
         dh::DofHandler, args...;
         # TODO: What is a good estimate for nnz_per_row?
-        nnz_per_row::Int = 2 * ndofs_per_cell(dh),
+        nnz_per_row::Int = 2 * ndofs_per_cell(dh.subdofhandlers[1]), # FIXME
         kwargs...,
     )
     sp = SparsityPattern(ndofs(dh), ndofs(dh); nnz_per_row = nnz_per_row)
