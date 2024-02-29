@@ -1,5 +1,13 @@
 module HeapAllocator
 
+@eval macro $(Symbol("const"))(field)
+    if VERSION >= v"1.8.0-DEV.1148"
+        Expr(:const, esc(field))
+    else
+        return esc(field)
+    end
+end
+
 const MALLOC_PAGE_SIZE = 4 * 1024 * 1024 % UInt # 4 MiB
 
 # Like Ptr{T} but also stores the number of bytes allocated
@@ -21,9 +29,9 @@ end
 # is split into smaller blocks to minimize the number of Libc.malloc/Libc.free
 # calls.
 mutable struct Page
-    const ptr::SizedPtr{UInt8} # malloc'd pointer
-    const blocksize::UInt      # blocksize for this page
-    const freelist::BitVector  # block is free/used
+    @const ptr::SizedPtr{UInt8} # malloc'd pointer
+    @const blocksize::UInt      # blocksize for this page
+    @const freelist::BitVector  # block is free/used
     free::SizedPtr{UInt8}      # head of the free-list
     n_free::UInt               # number of free blocks
 end
@@ -109,7 +117,7 @@ function _malloc(fheap::FixedSizeHeap, size::UInt)
 end
 
 mutable struct Heap
-    const size_heaps::Vector{FixedSizeHeap} # 2, 4, 6, 8, ...
+    @const size_heaps::Vector{FixedSizeHeap} # 2, 4, 6, 8, ...
     function Heap()
         heap = new(FixedSizeHeap[])
         finalizer(free, heap)
