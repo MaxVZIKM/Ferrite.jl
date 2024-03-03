@@ -21,7 +21,7 @@ using Ferrite, BlockArrays, SparseArrays, Test
 
     K = create_matrix(dh, ch)
     f = zeros(axes(K, 1))
-    # TODO: create_matrix(BlockMatrix, ...) should work
+    # TODO: create_matrix(BlockMatrix, ...) should work and default to field blocking
     bsp = BlockSparsityPattern([2nd, 1nd])
     create_sparsity_pattern!(bsp, dh, ch)
     KB = create_matrix(BlockMatrix, bsp)
@@ -69,19 +69,16 @@ using Ferrite, BlockArrays, SparseArrays, Test
     # Global application of BC not supported yet
     @test_throws ErrorException apply!(KB, fB, ch)
 
-    # FIXME: This is not testing the same thing now
-    # Custom blocking by passing a partially initialized matrix
+    # Custom blocking
     perm = invperm([ch.free_dofs; ch.prescribed_dofs])
     renumber!(dh, ch, perm)
     nfree = length(ch.free_dofs)
     npres = length(ch.prescribed_dofs)
     K = create_matrix(dh, ch)
     block_sizes = [nfree, npres]
-    # KBtmp = BlockArray(undef_blocks, SparseMatrixCSC{Float64, Int}, block_sizes, block_sizes)
     bsp = BlockSparsityPattern(block_sizes)
     create_sparsity_pattern!(bsp, dh, ch)
     KB = create_matrix(BlockMatrix, bsp)
-    # @test KBtmp === KB
     @test blocksize(KB) == (2, 2)
     @test size(KB[Block(1), Block(1)]) == (nfree, nfree)
     @test size(KB[Block(2), Block(1)]) == (npres, nfree)

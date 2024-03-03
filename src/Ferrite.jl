@@ -106,6 +106,7 @@ include("Dofs/DofHandler.jl")
 include("Dofs/ConstraintHandler.jl")
 include("Dofs/apply_analytical.jl")
 include("Dofs/sparsity_pattern.jl")
+include("Dofs/bsp.jl")
 include("Dofs/DofRenumbering.jl")
 
 include("iterators.jl")

@@ -171,21 +171,6 @@ eachrow(sp::SparsityPattern)           = sp.rows
 eachrow(sp::SparsityPattern, row::Int) = sp.rows[row]
 
 
-########################
-# BlockSparsityPattern #
-########################
-
-# This is implemented as an extension in ext/FerriteBlockArrays.jl. This method exist to
-# give a nice error message. Keep the signature in sync with the constructor in
-# ext/FerriteBlockArrays.jl (just a tad less specific here).
-function BlockSparsityPattern(::AbstractVector{<:Integer})
-    msg = "Ferrite's block matrix functionality depends on the package BlockArrays to " *
-          "be installed and loaded into the session. Install BlockArrays " *
-          "(`pkg> add BlockArrays`) and load it (`using BlockArrays`) to enable."
-    error(msg)
-end
-
-
 ################################################
 ## Adding entries to AbstractSparsityPatterns ##
 ################################################
@@ -365,6 +350,7 @@ end
 ##############################
 
 @inline function insert_sorted!(x::Vector{Int}, item::Int)
+    error()
     k = searchsortedfirst(x, item)
     if k == lastindex(x) + 1 || item != x[k]
         insert!(x, k, item)
