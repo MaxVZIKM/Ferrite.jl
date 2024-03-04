@@ -1,4 +1,4 @@
-using Revise, Test, Ferrite.HeapAllocator
+using Test, Ferrite.HeapAllocator
 
 @testset "HeapAllocator.jl" begin
 
