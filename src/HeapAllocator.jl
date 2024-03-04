@@ -284,6 +284,13 @@ end
 
 realloc(x::HeapVector, n::Int) = realloc(x.heap, x, n)
 
+function free(heap::Heap, x::HeapVector)
+    @assert heap === x.heap
+    return free(heap, x.ptr)
+end
+
+free(x::HeapVector) = free(x.heap, x)
+
 @inline function resize(x::HeapVector{T}, n::Int) where T
     if n > allocated_length(x)
         return realloc(x, n)
