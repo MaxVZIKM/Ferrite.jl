@@ -452,7 +452,7 @@ function _condense_sparsity_pattern!(
     heap = HeapAllocator.Heap()
     sp′ = Dict{Int, HeapAllocator.HeapVector{Int}}()
 
-    for (row, colidxs) in pairs(eachrow(sp))
+    for (row, colidxs) in zip(1:n_rows(sp), eachrow(sp)) # pairs(eachrow(sp))
         row_coeffs = coefficients_for_dof(dofmapping, dofcoefficients, row)
         if row_coeffs === nothing
             # This row is _not_ constrained, check columns of this row...
@@ -598,7 +598,7 @@ function _create_matrix(::Type{SparseMatrixCSC{Tv, Ti}}, sp::AbstractSparsityPat
     # 3. Populate rowval. Since SparsityPattern is row-based we need to allocate an extra
     #    work buffer here to keep track of the next index into rowval
     nextinds = copy(colptr)
-    for (row, colidxs) in pairs(eachrow(sp))
+    for (row, colidxs) in zip(1:n_rows(sp), eachrow(sp)) # pairs(eachrow(sp))
         for col in colidxs
             sym && row > col && continue
             k = nextinds[col]
