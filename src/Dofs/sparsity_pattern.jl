@@ -152,7 +152,7 @@ n_rows(sp::SparsityPattern) = sp.nrows
 n_cols(sp::SparsityPattern) = sp.ncols
 
 @inline function add_entry!(sp::SparsityPattern, row::Int, col::Int)
-    @boundscheck 1 <= row <= n_rows(sp) && 1 <= col <= n_cols(sp)
+    @boundscheck (1 <= row <= n_rows(sp) && 1 <= col <= n_cols(sp)) || throw(BoundsError(sp, (row, col)))
     r = @inbounds sp.rows[row]
     r = insert_sorted(r, col)
     @inbounds sp.rows[row] = r
@@ -348,15 +348,6 @@ end
 ##############################
 # Sparsity pattern internals #
 ##############################
-
-@inline function insert_sorted!(x::Vector{Int}, item::Int)
-    error()
-    k = searchsortedfirst(x, item)
-    if k == lastindex(x) + 1 || item != x[k]
-        insert!(x, k, item)
-    end
-    return x
-end
 
 # Compute a coupling matrix of size (ndofs_per_cell × ndofs_per_cell) based on the input
 # coupling which can be of size i) (nfields × nfields) specifying coupling between fields,
